@@ -316,7 +316,8 @@
 <h1 id="o-和-omega-符号"><a href="#o-和-omega-符号" class="headerlink" title="$o 和 \omega$符号"></a>$o 和 \omega$符号</h1><p>更“严格的”$O$和$\Omega$，不等式需要对所有的$c$成立，而不仅仅是一个特定的c</p>
 <p>$o(g(n))={f(n): 对于所有常数c&gt;0, 总存在n_0&gt;0, 使得对于所有的n&gt;n_0, 都有0 \leqslant f(n) \leqslant cg(n) }$<br>$\omega (g(n))={f(n): 对于所有常数c&gt;0, 总存在n_0&gt;0, 使得对于所有的n&gt;n_0, 都有0 \leqslant cg(n) \leqslant f(n) }$<br>在这种情况下，$n_0$依赖于c</p>
 <p>例：<br>$2n^2=O(n^3)$<br>$\frac{1}{2}n^2 = \Theta(n^2) \neq o(n^2) \neq \omega(n^2)$</p>
-<h1 id="类比"><a href="#类比" class="headerlink" title="类比"></a>类比</h1><table>
+<h1 id="类比"><a href="#类比" class="headerlink" title="类比"></a>类比</h1><div class="table-container">
+<table>
 <thead>
 <tr>
 <th style="text-align:left">$O$</th>
@@ -336,6 +337,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p><img src="http://owruh8822.bkt.clouddn.com/mit_2_algorithm_analysis_progressive_notation.jpg" alt="这里写图片描述"></p>
 
       
@@ -702,7 +704,24 @@
         }
       });
     </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
   
 
 
