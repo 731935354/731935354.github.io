@@ -53,7 +53,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="算法," />
 
 
 
@@ -69,16 +69,20 @@
 
 
 
-<meta name="description" content="做更好的自己">
-<meta property="og:type" content="website">
-<meta property="og:title" content="LifeStory">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="本文介绍算法分析中的渐近符号，分别为$O$，$\Omega$，$\Theta$，$o$和$\omega$。">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MIT算法导论笔记(2):渐近符号">
+<meta property="og:url" content="http://yoursite.com/2017/09/21/mit_2_progressive_notation/index.html">
 <meta property="og:site_name" content="LifeStory">
-<meta property="og:description" content="做更好的自己">
+<meta property="og:description" content="本文介绍算法分析中的渐近符号，分别为$O$，$\Omega$，$\Theta$，$o$和$\omega$。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://owruh8822.bkt.clouddn.com/mit_2_algorithm_analysis_progressive_notation.jpg">
+<meta property="og:updated_time" content="2017-09-24T12:09:53.503Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LifeStory">
-<meta name="twitter:description" content="做更好的自己">
+<meta name="twitter:title" content="MIT算法导论笔记(2):渐近符号">
+<meta name="twitter:description" content="本文介绍算法分析中的渐近符号，分别为$O$，$\Omega$，$\Theta$，$o$和$\omega$。">
+<meta name="twitter:image" content="http://owruh8822.bkt.clouddn.com/mit_2_algorithm_analysis_progressive_notation.jpg">
 
 
 
@@ -108,13 +112,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/21/mit_2_progressive_notation/"/>
 
 
 
 
 
-  <title>LifeStory</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>MIT算法导论笔记(2):渐近符号 | LifeStory</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -133,8 +137,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left 
-  page-home">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -217,133 +220,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/24/mit_3_solve_recursive/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="朱荣鑫">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LifeStory">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/24/mit_3_solve_recursive/" itemprop="url">MIT算法导论笔记(3):求解递归式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-24T18:56:33+08:00">
-                2017-09-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>至今为止，求解递归式还没有一种通用的方法。<br>本文介绍求解递归式的三个主要方法：代换法，递归树法，主定理法。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/09/24/mit_3_solve_recursive/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
 
   
 
@@ -373,9 +252,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/21/mit_2_progressive_notation/" itemprop="url">MIT算法导论笔记(2):渐近符号</a></h1>
+          <h1 class="post-title" itemprop="name headline">MIT算法导论笔记(2):渐近符号</h1>
         
 
         <div class="post-meta">
@@ -425,16 +302,42 @@
       
 
       
-        
-          <p>本文介绍算法分析中的渐近符号，分别为$O$，$\Omega$，$\Theta$，$o$和$\omega$。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/09/21/mit_2_progressive_notation/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+        <p>本文介绍算法分析中的渐近符号，分别为$O$，$\Omega$，$\Theta$，$o$和$\omega$。<br><a id="more"></a></p>
+<h1 id="O-符号"><a href="#O-符号" class="headerlink" title="$O$符号"></a>$O$符号</h1><h2 id="形式化定义"><a href="#形式化定义" class="headerlink" title="形式化定义"></a>形式化定义</h2><p>$f(n)=O(g(n))$表示存在常数$c&gt;0$, $n_0&gt;0$，使得对于所有的的$n&gt;n_0$，有$0 \leqslant f(n) \leqslant cg(n)$  </p>
+<p>例：$2n^2=O(n^3)$<br><strong>直观理解</strong><br>和“小于或等于”类似。去掉首项系数(此处为2)和低阶项(此处无低阶项)之后，剩下的部分小于或等于$n^3$<br><strong>注意</strong><br>$O$并不是对称的。不能说$n^3 \neq O(n^2)$，甚至也不能说$O(n^3)=n^2$  </p>
+<h2 id="集合定义"><a href="#集合定义" class="headerlink" title="集合定义"></a>集合定义</h2><p>$O(g(n))={f(n): 存在常数c&gt;0, n_0&gt;0, 使得对于所有的n&gt;n_0, 都有0 \leqslant f(n) \leqslant cg(n) }$<br>因此，不能简单理解$2n^2$与$O(n^3)$是“相等”的，而应该理解为$2n^2$属于函数集$O(n^3)$($2(n^2) \in O(n^3)$)</p>
+<h2 id="宏"><a href="#宏" class="headerlink" title="宏"></a>宏</h2><p>出现在公式中的集合符号(如$O$)，表示集合中的某一个函数，而不是集合整体。  </p>
+<p>例1：$f(n)=n^3+O(n^2)$<br><strong>直观理解</strong><br>表示了一个误差界限，即$f(n)$主要是由$n^3$构成的，但也有一些$O(n^2)$的低阶项<br><strong>实际含义</strong><br>存在一个函数$h(n) \in O(n^2)$，使得$f(n)=n^3+h(n)$ </p>
+<p>例2：$n^2+O(n)=O(n^2)$<br><strong>直观理解</strong><br>“=”应该理解成“是”，而不是“等于”。等号左边隐含任意量词，等号右边隐含存在量词<br><strong>实际含义</strong><br>对于任意函数$f(n) \in O(n)$，总存在函数$h(n) \in O(n^2)$，使得$n^2+f(n)=h(n)$<br><strong>用途</strong>： 如果有很长的“等式链”，第一个就等于最后一个（只能从左到右，因为$O$是非对称的）</p>
+<h1 id="Omega-符号"><a href="#Omega-符号" class="headerlink" title="$\Omega$符号"></a>$\Omega$符号</h1><h2 id="集合定义-1"><a href="#集合定义-1" class="headerlink" title="集合定义"></a>集合定义</h2><p>$\Omega (g(n))={f(n): 存在常数c&gt;0, n_0&gt;0, 使得对于所有的n&gt;n_0，都有0 \leqslant cg(n) \leqslant f(n) }$</p>
+<p>例：$\sqrt{n} = \Omega(\lg{n}) $<br><strong>直观理解</strong>： 对于充分大的$n$，$\sqrt{n}$至少是$\Omega(\lg{n})$的常数倍。</p>
+<h1 id="Theta-符号"><a href="#Theta-符号" class="headerlink" title="$\Theta$符号"></a>$\Theta$符号</h1><p>$\Theta(g(n))=\Omega (g(n)) \cap O(g(n))$</p>
+<p>例：<br>$n^2=\Theta(n^2)$<br>$n^2+O(n)=\Theta(n^2)$</p>
+<h1 id="o-和-omega-符号"><a href="#o-和-omega-符号" class="headerlink" title="$o 和 \omega$符号"></a>$o 和 \omega$符号</h1><p>更“严格的”$O$和$\Omega$，不等式需要对所有的$c$成立，而不仅仅是一个特定的c</p>
+<p>$o(g(n))={f(n): 对于所有常数c&gt;0, 总存在n_0&gt;0, 使得对于所有的n&gt;n_0, 都有0 \leqslant f(n) \leqslant cg(n) }$<br>$\omega (g(n))={f(n): 对于所有常数c&gt;0, 总存在n_0&gt;0, 使得对于所有的n&gt;n_0, 都有0 \leqslant cg(n) \leqslant f(n) }$<br>在这种情况下，$n_0$依赖于c</p>
+<p>例：<br>$2n^2=O(n^3)$<br>$\frac{1}{2}n^2 = \Theta(n^2) \neq o(n^2) \neq \omega(n^2)$</p>
+<h1 id="类比"><a href="#类比" class="headerlink" title="类比"></a>类比</h1><table>
+<thead>
+<tr>
+<th style="text-align:left">$O$</th>
+<th style="text-align:left">$\Omega$</th>
+<th style="text-align:left">$\Theta$</th>
+<th style="text-align:left">$o$</th>
+<th style="text-align:left">$\omega$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">$\leqslant$</td>
+<td style="text-align:left">$\geqslant$</td>
+<td style="text-align:left">$=$</td>
+<td style="text-align:left">$&lt;$</td>
+<td style="text-align:left">$&gt;$</td>
+</tr>
+</tbody>
+</table>
+<p><img src="http://owruh8822.bkt.clouddn.com/mit_2_algorithm_analysis_progressive_notation.jpg" alt="这里写图片描述"></p>
+
       
     </div>
     
@@ -449,138 +352,40 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/19/mit_1_algorithm_analysis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="朱荣鑫">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LifeStory">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/19/mit_1_algorithm_analysis/" itemprop="url">MIT算法导论笔记(1):算法分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T15:30:00+08:00">
-                2017-09-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/算法/" rel="tag"># 算法</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          <p>算法分析是关于计算机程序性能和资源利用的理论研究。<br>主要关注点在于程序性能，如何让程序运行的更快。同时也会涉及其他问题，例如通信，存储器等。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/09/19/mit_1_algorithm_analysis/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/19/mit_1_algorithm_analysis/" rel="next" title="MIT算法导论笔记(1):算法分析">
+                <i class="fa fa-chevron-left"></i> MIT算法导论笔记(1):算法分析
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
 
-    
+          <span class="post-nav-divider"></span>
 
-    
-
-    
-
-    <footer class="post-footer">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/24/mit_3_solve_recursive/" rel="prev" title="MIT算法导论笔记(3):求解递归式">
+                MIT算法导论笔记(3):求解递归式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -590,10 +395,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -601,6 +407,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -621,8 +431,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <img class="site-author-image" itemprop="image"
@@ -678,6 +497,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#O-符号"><span class="nav-number">1.</span> <span class="nav-text">$O$符号</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#形式化定义"><span class="nav-number">1.1.</span> <span class="nav-text">形式化定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集合定义"><span class="nav-number">1.2.</span> <span class="nav-text">集合定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#宏"><span class="nav-number">1.3.</span> <span class="nav-text">宏</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Omega-符号"><span class="nav-number">2.</span> <span class="nav-text">$\Omega$符号</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#集合定义-1"><span class="nav-number">2.1.</span> <span class="nav-text">集合定义</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Theta-符号"><span class="nav-number">3.</span> <span class="nav-text">$\Theta$符号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#o-和-omega-符号"><span class="nav-number">4.</span> <span class="nav-text">$o 和 \omega$符号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类比"><span class="nav-number">5.</span> <span class="nav-text">类比</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

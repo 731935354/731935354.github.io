@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="算法," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="算法分析是关于计算机程序性能和资源利用的理论研究。主要关注点在于程序性能，如何让程序运行的更快。同时也会涉及其他问题，例如通信，存储器等。">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MIT算法导论笔记(1):算法分析">
+<meta property="og:url" content="http://yoursite.com/2017/09/19/mit_1_algorithm_analysis/index.html">
+<meta property="og:site_name" content="LifeStory">
+<meta property="og:description" content="算法分析是关于计算机程序性能和资源利用的理论研究。主要关注点在于程序性能，如何让程序运行的更快。同时也会涉及其他问题，例如通信，存储器等。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://owruh8822.bkt.clouddn.com/4.png">
+<meta property="og:image" content="http://owruh8822.bkt.clouddn.com/5.png">
+<meta property="og:image" content="http://owruh8822.bkt.clouddn.com/7.png">
+<meta property="og:image" content="http://owruh8822.bkt.clouddn.com/mit_1_algorithm_analysis_recursive_tree_1.png">
+<meta property="og:image" content="http://owruh8822.bkt.clouddn.com/mit_1_algorithm_analysis_recursive_tree_2.png">
+<meta property="og:updated_time" content="2017-09-24T12:09:33.855Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MIT算法导论笔记(1):算法分析">
+<meta name="twitter:description" content="算法分析是关于计算机程序性能和资源利用的理论研究。主要关注点在于程序性能，如何让程序运行的更快。同时也会涉及其他问题，例如通信，存储器等。">
+<meta name="twitter:image" content="http://owruh8822.bkt.clouddn.com/4.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/19/mit_1_algorithm_analysis/"/>
+
+
+
+
+
+  <title>MIT算法导论笔记(1):算法分析 | LifeStory</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LifeStory</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/19/mit_1_algorithm_analysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朱荣鑫">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LifeStory">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MIT算法导论笔记(1):算法分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T15:30:00+08:00">
+                2017-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>算法分析是关于计算机程序性能和资源利用的理论研究。<br>主要关注点在于程序性能，如何让程序运行的更快。同时也会涉及其他问题，例如通信，存储器等。<br><a id="more"></a></p>
+<h1 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h1><p><strong>问题1：什么比性能更重要？</strong><br>正确性，可维护性，简洁性，程序员的时间成本，健壮性，功能性，模块化，安全性，可扩展性，用户友好性等等。</p>
+<p><strong>问题2：如果算法和性能和都不重要，为什么还要学习它们？</strong>  </p>
+<ol>
+<li><p>算法能够将不可行变成可行<br>如：在实时需求中，程序不够快等同于不可行；如果程序占用过多的内存，也是不可行的。</p>
+</li>
+<li><p>算法已经成为一种广泛应用于计算机科学领域的描述程序行为的语言。</p>
+</li>
+<li><p>性能处于最底层，其角色和经济中的货币相似，就像你可以用货币买来水（水对你的生命来说比货币更重要），你也可以“支付”性能来换取良好的用户体验，或换取安全性。<br>一个例子：有人希望有更多的功能，因此用Java来写程序，尽管它比C写的程序慢的多（可能会损失三倍的性能），但考虑到Java的优点（面向对象，异常处理等），人们愿意“支付”三倍性能。</p>
+</li>
+<li><p>算法很有趣</p>
+</li>
+</ol>
+<h1 id="排序问题"><a href="#排序问题" class="headerlink" title="排序问题"></a>排序问题</h1><p>下面以排序问题为例引入算法分析。</p>
+<p><strong>问题描述：</strong>一组输入序列$&lt; a_1, a_2, …a_n&gt;$，按照需求重新排列后输出$&lt; a_1’, a_2’, …a_n’&gt;$，<br>满足$a_1’ \leqslant a_2’ \leqslant …\leqslant a_n’$。</p>
+<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><p>插入排序伪代码：<br>(伪代码与编程语言很类似，只是经常包含一些英语，能够让我们更容易理解算法所要表达的意思。)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Insertion-Sort(A, n) // Sorts A[1...n]</div><div class="line">for j ← 2 to n</div><div class="line">	do key ← A[j]</div><div class="line">		i ← j-1</div><div class="line">		while i &gt; 0 and A[i] &gt; key</div><div class="line">			do A[i+1] ← A[i]</div><div class="line">				i ← i-1</div><div class="line">		A[i+1] ← key</div></pre></td></tr></table></figure></p>
+<p><strong>解析</strong><br>A为待排序的数组。在外层for循环中，j从2递增到n，在算法任意一步，取出数组A中的第j个值（之前的部分已经有序），把这个值存在key中，并依次把前一个元素向后移一位，直到前一个元素不大于key为止，从而让“有序”的部分长度增加1。</p>
+<p>如下图所示：</p>
+<p><img src="http://owruh8822.bkt.clouddn.com/4.png" alt="这里写图片描述"></p>
+<p>举例：<br>给定数组 8，2，4，9，3，6，并设定j从2开始（即从第二个元素“2”开始）<br>排序过程如下：<br><img src="http://owruh8822.bkt.clouddn.com/5.png" alt="这里写图片描述"></p>
+<h2 id="算法运行时间"><a href="#算法运行时间" class="headerlink" title="算法运行时间"></a>算法运行时间</h2><ol>
+<li>与输入本身有关（假如输入已经有序，则运行时间将会很短）</li>
+<li>与输入规模有关（上面的例子输入规模为6，如果变为$6\times10^9$，运行时间将会变长）<br>——我们将把运行时间看成是输入规模的函数</li>
+<li>我们想知道运行时间的上限</li>
+</ol>
+<h2 id="算法分析的种类"><a href="#算法分析的种类" class="headerlink" title="算法分析的种类"></a>算法分析的种类</h2><ul>
+<li><p>最坏情况分析（最经常用到）<br>$T(n)$ = 输入规模为n时算法的最长运行时间</p>
+</li>
+<li><p>平均情况分析（有时用到）<br>$T(n)$ = 输入规模为n时算法的期望运行时间<br>期望运行时间 = 所有输入按概率加权平均的运行时间<br>每种输入出现的概率是未知的，所以要先假设每种输入出现的概率分布</p>
+</li>
+<li><p>最好情况分析（假象）<br>可以给慢速算法选择特定的输入，从而使运行时间很短，但是，这种信息没什么用。</p>
+</li>
+</ul>
+<h2 id="插入排序算法的最坏情况运行时间"><a href="#插入排序算法的最坏情况运行时间" class="headerlink" title="插入排序算法的最坏情况运行时间"></a>插入排序算法的最坏情况运行时间</h2><p>算法的运行时间与计算机的配置有关（超级计算机？腕表计算机？）  </p>
+<ul>
+<li>“相对运行时间”（不同算法在同一台计算机上运行的时间）  </li>
+<li>“绝对运行时间”（有没有一种算法在任何计算机上运行时间都很短？）  </li>
+</ul>
+<p>当讨论软件相关的算法的最坏运行时间而不涉及硬件时，“相对时间”与“绝对时间”会造成困惑。  </p>
+<p>如何解决这种复杂的局面？如何把问题简化到可以用数学手段来处理？<br>那就是“大局观”——<strong>渐近分析</strong></p>
+<h2 id="渐近分析"><a href="#渐近分析" class="headerlink" title="渐近分析"></a>渐近分析</h2><ol>
+<li>忽略掉那些依赖于机器的常量</li>
+<li>关注运行时间的增长性（而不是实际运行时间）$T(n) :n \rightarrow \infty$</li>
+</ol>
+<p>为了更好的解释渐近分析，首先引入渐近符号：<br>$\Theta$：丢掉低阶项，并忽略前面的常数因子<br>例：$3x^3 + 90n^2 - 5n + 6046 = \Theta(n^3)$<br>因此我们知道，当n $\rightarrow \infty$时，$\Theta(n^2)$的算法总比$\Theta(n^3)$的算法快，即使在较慢的计算机上运行$\Theta(n^2)$的算法，在较快的计算机上运行$\Theta(n^3)$的算法，这个性质仍然满足。因为不同的平台上我们可能只差一个常数因子。  </p>
+<p>下图展示了$\Theta(n^3)$的算法与$\Theta(n^2)$的算法运行时间与输入规模的关系。<br><img src="http://owruh8822.bkt.clouddn.com/7.png" alt="这里写图片描述"><br>可以看出，总有一个点$n_0$，当输入规模大于$n_0$时，$\Theta(n^2)$的算法都比$\Theta(n^3)$的算法有更小的开销。<br>然而，从工程的角度来看，仍存在一个问题：有时$n_0$太大了，大到计算机无法运行这样的算法，因此我们有时也对低速算法感兴趣。尽管从渐近的观点来看它们的运行速度比较慢，但它们在合理规模的输入下运行得更快。<br>结论：要在数学理解与工程直觉之间做出权衡（仅仅会做算法分析是不够的，还需要学习怎样编程以及如何在实践中运用这些工具）</p>
+<h2 id="插入排序算法分析"><a href="#插入排序算法分析" class="headerlink" title="插入排序算法分析"></a>插入排序算法分析</h2><p>最坏情况：输入序列为逆序<br>进行操作数目计数的一种方法：内存引用计数（实际上访问了某个变量多少次）<br>$T(n) = \sum_{j=2}^{n}\Theta(j) = \Theta(n^2)$  &emsp;(算数级数）</p>
+<p><strong>插入排序快吗？</strong></p>
+<ul>
+<li>如果输入规模很小，比较快  </li>
+<li>如果输入规模很大，并不快</li>
+</ul>
+<p>下面引入一个更快的排序方法，归并排序。</p>
+<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><p>算法步骤包括以下3点：  </p>
+<ol>
+<li>如果n = 1，排序完毕</li>
+<li>递归排序$A[1, \lceil n/2 \rceil]$和$A[\lceil n/2 \rceil + 1, n]$</li>
+<li>合并两个序列</li>
+</ol>
+<p>###关键子程序：归并<br>假设现在已经有两个有序的子序列  </p>
+<ul>
+<li>$A[1, \lceil n/2 \rceil]$：[2，7，13，20]</li>
+<li>$A[\lceil n/2 \rceil + 1, n]$：[1，9，11，12]</li>
+</ul>
+<p>想要将这两个序列合并成一个大的目标序列（目前为空）</p>
+<ul>
+<li>target: $[]$</li>
+</ul>
+<p>具体做法如下:</p>
+<ol>
+<li><p>找出两个序列中最小值“1”，插入目标序列末尾，并将其从原序列中删除</p>
+<blockquote>
+<p>$A[1, \lceil n/2 \rceil]$：[2，7，13，20]<br>$A[\lceil n/2 \rceil + 1, n]$：[9，11，12]<br>$target: [1]$</p>
+</blockquote>
+</li>
+<li><p>找出两个序列中最小值“2”，插入目标序列末尾，并将其从原序列中删除</p>
+<blockquote>
+<p>$A[1, \lceil n/2 \rceil]$：[7，13，20]<br>$A[\lceil n/2 \rceil + 1, n]$：[9，11，12]<br>$target: [1, 2]$</p>
+</blockquote>
+</li>
+<li><p>重复上述步骤直到两序列为空</p>
+</li>
+</ol>
+<p>由于每一步操作的运行时间都与输入规模无关（比较两个值，取最小值，删除最小值，将指针前移一位），因此每一步的运行时间都是$\Theta(1)$的。遍历两序列所有元素，需要n次，因此归并操作是$\Theta(n)$的。</p>
+<h2 id="归并排序时间复杂度分析"><a href="#归并排序时间复杂度分析" class="headerlink" title="归并排序时间复杂度分析"></a>归并排序时间复杂度分析</h2><p>设总体时间复杂度为$T(n)$，分别考虑以下3个步骤的时间复杂度：</p>
+<ol>
+<li><p>如果n = 1，排序完毕 —— 判断n是否为1，与输入规模无关，$\Theta(1)$&nbsp;(并不严格，为了简化问题，后续介绍）</p>
+</li>
+<li><p>递归排序$A[1, \lceil n/2 \rceil]$和$A[\lceil n/2 \rceil + 1, n]$ —— $2T(n/2)$（并不严格，后续介绍）</p>
+</li>
+<li><p>合并两个排好序的序列 —— $\Theta(n)$</p>
+</li>
+</ol>
+<!-- \begin{aligned}
+& \Theta(1) \quad if \quad n = 1 \quad (通常会省略，对求解递归式没有影响）\\
+& 2T(n/2) + \Theta(n) \quad if \quad n > 1 \\
+\end{aligned}
+\right. -->
+<h2 id="递归式"><a href="#递归式" class="headerlink" title="递归式"></a>递归式</h2><p>$$T(n) =<br>\begin{cases}<br>\Theta(1) \quad if \quad n = 1 \quad \text{(通常会省略，对求解递归式没有影响)} \<br>2T(n/2) + \Theta(n) \quad if \quad n &gt; 1<br>\end{cases}$$</p>
+<p>具体求解方法将在下节讲解，这里用图形化方法——递归树，进行直观的理解。</p>
+<h2 id="递归树"><a href="#递归树" class="headerlink" title="递归树"></a>递归树</h2><p>$$T(n) = 2T(n/2) + cn \quad 常数c &gt; 0$$<br>展开如下：<br><img src="http://owruh8822.bkt.clouddn.com/mit_1_algorithm_analysis_recursive_tree_1.png" alt="这里写图片描述"></p>
+<p>一直递推下去，会出现如下情形：<br><img src="http://owruh8822.bkt.clouddn.com/mit_1_algorithm_analysis_recursive_tree_2.png" alt="这里写图片描述"><br>树高：n折半$log_2{n}$次以后为1<br>叶子节点数：第i层有$2^{i-1}$个节点，第$log_2{n}+1$层有n个节点</p>
+<p> 计算总体时间复杂度：  </p>
+<ul>
+<li>第一层：$cn$  </li>
+<li>第二层：$cn$  </li>
+<li>$\dots$</li>
+<li>第lgn层：$cn$</li>
+<li>最后一层：$\Theta(n)$  </li>
+</ul>
+<p>$T(n) = (cn)lgn+\Theta(n) = \Theta(nlgn)$<br>从渐近的角度来开，在充分大的输入规模下（n&gt;30），归并排序优于插入排序。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/21/mit_2_progressive_notation/" rel="prev" title="MIT算法导论笔记(2):渐近符号">
+                MIT算法导论笔记(2):渐近符号 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/head.jpg"
+              alt="朱荣鑫" />
+          
+            <p class="site-author-name" itemprop="name">朱荣鑫</p>
+            <p class="site-description motion-element" itemprop="description">做更好的自己</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引入"><span class="nav-number">1.</span> <span class="nav-text">引入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#排序问题"><span class="nav-number">2.</span> <span class="nav-text">排序问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序"><span class="nav-number">2.1.</span> <span class="nav-text">插入排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法运行时间"><span class="nav-number">2.2.</span> <span class="nav-text">算法运行时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法分析的种类"><span class="nav-number">2.3.</span> <span class="nav-text">算法分析的种类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序算法的最坏情况运行时间"><span class="nav-number">2.4.</span> <span class="nav-text">插入排序算法的最坏情况运行时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渐近分析"><span class="nav-number">2.5.</span> <span class="nav-text">渐近分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序算法分析"><span class="nav-number">2.6.</span> <span class="nav-text">插入排序算法分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#归并排序"><span class="nav-number">2.7.</span> <span class="nav-text">归并排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#归并排序时间复杂度分析"><span class="nav-number">2.8.</span> <span class="nav-text">归并排序时间复杂度分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#递归式"><span class="nav-number">2.9.</span> <span class="nav-text">递归式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#递归树"><span class="nav-number">2.10.</span> <span class="nav-text">递归树</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">朱荣鑫</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
