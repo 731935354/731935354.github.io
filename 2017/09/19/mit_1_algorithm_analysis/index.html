@@ -82,7 +82,7 @@
 <meta property="og:image" content="http://owruh8822.bkt.clouddn.com/7.png">
 <meta property="og:image" content="http://owruh8822.bkt.clouddn.com/mit_1_algorithm_analysis_recursive_tree_1.png">
 <meta property="og:image" content="http://owruh8822.bkt.clouddn.com/mit_1_algorithm_analysis_recursive_tree_2.png">
-<meta property="og:updated_time" content="2017-09-25T01:12:06.263Z">
+<meta property="og:updated_time" content="2017-09-25T02:30:06.259Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MIT算法导论笔记(1):算法分析">
 <meta name="twitter:description" content="算法分析是关于计算机程序性能和资源利用的理论研究。主要关注点在于程序性能，如何让程序运行的更快。同时也会涉及其他问题，例如通信，存储器等。">
@@ -436,8 +436,8 @@
 \right. -->
 <h2 id="递归式"><a href="#递归式" class="headerlink" title="递归式"></a>递归式</h2><script type="math/tex; mode=display">T(n) =
 \begin{cases}
-\Theta(1) \quad if \quad n = 1 \quad \text{(通常会省略，对求解递归式没有影响)} \\
-2T(n/2) + \Theta(n) \quad if \quad n > 1 
+\Theta(1),n = 1 \quad \text{(通常会省略)} \\
+2T(n/2) + \Theta(n),n > 1 
 \end{cases}</script><p>具体求解方法将在下节讲解，这里用图形化方法——递归树，进行直观的理解。</p>
 <h2 id="递归树"><a href="#递归树" class="headerlink" title="递归树"></a>递归树</h2><script type="math/tex; mode=display">T(n) = 2T(n/2) + cn \quad 常数c > 0</script><p>展开如下：<br><img src="http://owruh8822.bkt.clouddn.com/mit_1_algorithm_analysis_recursive_tree_1.png" alt="这里写图片描述"></p>
 <p>一直递推下去，会出现如下情形：<br><img src="http://owruh8822.bkt.clouddn.com/mit_1_algorithm_analysis_recursive_tree_2.png" alt="这里写图片描述"><br>树高：n折半$log_2{n}$次以后为1<br>叶子节点数：第i层有$2^{i-1}$个节点，第$log_2{n}+1$层有n个节点</p>
