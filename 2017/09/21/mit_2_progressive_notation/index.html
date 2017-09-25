@@ -78,7 +78,7 @@
 <meta property="og:description" content="本文介绍算法分析中的渐近符号，分别为$O$，$\Omega$，$\Theta$，$o$和$\omega$。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://owruh8822.bkt.clouddn.com/mit_2_algorithm_analysis_progressive_notation.jpg">
-<meta property="og:updated_time" content="2017-09-25T00:52:00.847Z">
+<meta property="og:updated_time" content="2017-09-25T01:48:29.455Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MIT算法导论笔记(2):渐近符号">
 <meta name="twitter:description" content="本文介绍算法分析中的渐近符号，分别为$O$，$\Omega$，$\Theta$，$o$和$\omega$。">
@@ -337,7 +337,7 @@
         <p>本文介绍算法分析中的渐近符号，分别为$O$，$\Omega$，$\Theta$，$o$和$\omega$。<br><a id="more"></a></p>
 <h1 id="O-符号"><a href="#O-符号" class="headerlink" title="$O$符号"></a>$O$符号</h1><h2 id="形式化定义"><a href="#形式化定义" class="headerlink" title="形式化定义"></a>形式化定义</h2><p>$f(n)=O(g(n))$表示存在常数$c&gt;0$, $n_0&gt;0$，使得对于所有的的$n&gt;n_0$，有$0 \leqslant f(n) \leqslant cg(n)$  </p>
 <p>例：$2n^2=O(n^3)$<br><strong>直观理解</strong><br>和“小于或等于”类似。去掉首项系数(此处为2)和低阶项(此处无低阶项)之后，剩下的部分小于或等于$n^3$<br><strong>注意</strong><br>$O$并不是对称的。不能说$n^3 \neq O(n^2)$，甚至也不能说$O(n^3)=n^2$  </p>
-<h2 id="集合定义"><a href="#集合定义" class="headerlink" title="集合定义"></a>集合定义</h2><p>$O(g(n))={f(n): 存在常数c&gt;0, n_0&gt;0, 使得对于所有的n&gt;n_0, 都有0 \leqslant f(n) \leqslant cg(n) }$<br>因此，不能简单理解$2n^2$与$O(n^3)$是“相等”的，而应该理解为$2n^2$属于函数集$O(n^3)$($2(n^2) \in O(n^3)$)</p>
+<h2 id="集合定义"><a href="#集合定义" class="headerlink" title="集合定义"></a>集合定义</h2><p>$O(g(n))={f(n): 存在常数c&gt;0, n_0&gt;0, 使得对于所有的n&gt;n_0, 都有0 \leqslant f(n) \leqslant cg(n)}$<br>因此，不能简单理解$2n^2$与$O(n^3)$是“相等”的，而应该理解为$2n^2$属于函数集$O(n^3)$($2(n^2) \in O(n^3)$)</p>
 <h2 id="宏"><a href="#宏" class="headerlink" title="宏"></a>宏</h2><p>出现在公式中的集合符号(如$O$)，表示集合中的某一个函数，而不是集合整体。  </p>
 <p>例1：$f(n)=n^3+O(n^2)$<br><strong>直观理解</strong><br>表示了一个误差界限，即$f(n)$主要是由$n^3$构成的，但也有一些$O(n^2)$的低阶项<br><strong>实际含义</strong><br>存在一个函数$h(n) \in O(n^2)$，使得$f(n)=n^3+h(n)$ </p>
 <p>例2：$n^2+O(n)=O(n^2)$<br><strong>直观理解</strong><br>“=”应该理解成“是”，而不是“等于”。等号左边隐含任意量词，等号右边隐含存在量词<br><strong>实际含义</strong><br>对于任意函数$f(n) \in O(n)$，总存在函数$h(n) \in O(n^2)$，使得$n^2+f(n)=h(n)$<br><strong>用途</strong>： 如果有很长的“等式链”，第一个就等于最后一个（只能从左到右，因为$O$是非对称的）</p>
