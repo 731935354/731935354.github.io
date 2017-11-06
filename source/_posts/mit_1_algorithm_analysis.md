@@ -52,12 +52,12 @@ A为待排序的数组。在外层for循环中，j从2递增到n，在算法任�
 如下图所示：
 
 
-![这里写图片描述](http://owruh8822.bkt.clouddn.com/4.png)
+![这里写图片描述](http://owruh8822.bkt.clouddn.com/mit_1_algorithm_analysis_insertion_sort_1.png)
 
 举例：
 给定数组 8，2，4，9，3，6，并设定j从2开始（即从第二个元素“2”开始）
 排序过程如下：
-![这里写图片描述](http://owruh8822.bkt.clouddn.com/5.png)
+![这里写图片描述](http://owruh8822.bkt.clouddn.com/mit_1_algorithm_analysis_insertion_sort_2.png)
 
 ## 算法运行时间
 1. 与输入本身有关（假如输入已经有序，则运行时间将会很短）
@@ -98,7 +98,7 @@ $\Theta$：丢掉低阶项，并忽略前面的常数因子
 因此我们知道，当n $\rightarrow \infty$时，$\Theta(n^2)$的算法总比$\Theta(n^3)$的算法快，即使在较慢的计算机上运行$\Theta(n^2)$的算法，在较快的计算机上运行$\Theta(n^3)$的算法，这个性质仍然满足。因为不同的平台上我们可能只差一个常数因子。  
 
 下图展示了$\Theta(n^3)$的算法与$\Theta(n^2)$的算法运行时间与输入规模的关系。
-![这里写图片描述](http://owruh8822.bkt.clouddn.com/7.png)
+![这里写图片描述](http://owruh8822.bkt.clouddn.com/mit_1_algorithm_analysis_time.png)
 可以看出，总有一个点$n_0$，当输入规模大于$n_0$时，$\Theta(n^2)$的算法都比$\Theta(n^3)$的算法有更小的开销。  
 然而，从工程的角度来看，仍存在一个问题：有时$n_0$太大了，大到计算机无法运行这样的算法，因此我们有时也对低速算法感兴趣。尽管从渐近的观点来看它们的运行速度比较慢，但它们在合理规模的输入下运行得更快。  
 结论：要在数学理解与工程直觉之间做出权衡（仅仅会做算法分析是不够的，还需要学习怎样编程以及如何在实践中运用这些工具）
