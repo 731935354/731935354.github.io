@@ -1,5 +1,5 @@
 ---
-title: MIT算法导论笔记(6):线性时间排序
+title: MIT算法导论笔记(7):顺序统计、中值
 tags:
   - 算法
 categories: 技术
