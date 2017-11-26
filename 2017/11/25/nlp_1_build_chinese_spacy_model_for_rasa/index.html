@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="spacy," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="spacy提供了便捷的工具，可以将生成的语言模型打包成独立的package，之后可以利用pip安装。在rasa的配置文件中设定spacy_model_name字段为package的名字，rasa就可以实现自动导入。">
+<meta name="keywords" content="spacy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为Rasa生成spacy中文语言模型">
+<meta property="og:url" content="http://yoursite.com/2017/11/25/nlp_1_build_chinese_spacy_model_for_rasa/index.html">
+<meta property="og:site_name" content="LifeStory">
+<meta property="og:description" content="spacy提供了便捷的工具，可以将生成的语言模型打包成独立的package，之后可以利用pip安装。在rasa的配置文件中设定spacy_model_name字段为package的名字，rasa就可以实现自动导入。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://owruh8822.bkt.clouddn.com/spacy_1_tokenizer_test.png">
+<meta property="og:image" content="http://owruh8822.bkt.clouddn.com/spacy_1_model_raw_model_data_structure.png">
+<meta property="og:image" content="http://owruh8822.bkt.clouddn.com/spacy_1_vocab_structure.png">
+<meta property="og:image" content="http://owruh8822.bkt.clouddn.com/spacy_1_rasa_nlu_model.png">
+<meta property="og:image" content="http://owruh8822.bkt.clouddn.com/spacy_1_result.png">
+<meta property="og:updated_time" content="2017-11-26T03:28:16.588Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="为Rasa生成spacy中文语言模型">
+<meta name="twitter:description" content="spacy提供了便捷的工具，可以将生成的语言模型打包成独立的package，之后可以利用pip安装。在rasa的配置文件中设定spacy_model_name字段为package的名字，rasa就可以实现自动导入。">
+<meta name="twitter:image" content="http://owruh8822.bkt.clouddn.com/spacy_1_tokenizer_test.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/25/nlp_1_build_chinese_spacy_model_for_rasa/"/>
+
+
+
+
+
+  <title>为Rasa生成spacy中文语言模型 | LifeStory</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LifeStory</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/25/nlp_1_build_chinese_spacy_model_for_rasa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朱荣鑫">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LifeStory">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">为Rasa生成spacy中文语言模型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-25T23:03:31+08:00">
+                2017-11-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/自然语言处理/" itemprop="url" rel="index">
+                    <span itemprop="name">自然语言处理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>spacy提供了便捷的工具，可以将生成的语言模型打包成独立的package，之后可以利用pip安装。<br>在rasa的配置文件中设定spacy_model_name字段为package的名字，rasa就可以实现自动导入。 </p>
+<a id="more"></a>
+<p>实验环境<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">rasa_nlu: 0.10.4</div><div class="line">spacy: 2.0.3</div><div class="line">Anaconda: Anaconda3-5.0.1</div><div class="line">python: 3.6.3</div><div class="line">OS: win7</div></pre></td></tr></table></figure></p>
+<h1 id="为spacy添加中文分词器-基于哈工大ltp工具包"><a href="#为spacy添加中文分词器-基于哈工大ltp工具包" class="headerlink" title="为spacy添加中文分词器(基于哈工大ltp工具包)"></a>为spacy添加中文分词器(基于哈工大ltp工具包)</h1><p>在spacy中，每种语言都对应一个包。因此我们需要进入中文对应的目录，添加分词器的代码。</p>
+<h2 id="修改spacy源码"><a href="#修改spacy源码" class="headerlink" title="修改spacy源码"></a>修改spacy源码</h2><p>以ANACONDA_PATH表示Anaconda安装路径<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ANACONDA_PATH/Lib/site-package/spacy/lang/zh</div></pre></td></tr></table></figure></p>
+<p>修改__init__.py如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"># coding: utf8</div><div class="line">from __future__ import unicode_literals</div><div class="line"></div><div class="line">from ...language import Language</div><div class="line">from ...tokens import Doc</div><div class="line">from ...attrs import LANG</div><div class="line"></div><div class="line">import os</div><div class="line"></div><div class="line">class ChineseTokenizer(object):</div><div class="line">    def __init__(self, cls, nlp=None):</div><div class="line">        self.vocab = nlp.vocab if nlp is not None else cls.create_vocab(nlp)</div><div class="line"></div><div class="line">    def __call__(self, text):</div><div class="line">        try:</div><div class="line">            from pyltp import Segmentor</div><div class="line">        except ImportError:</div><div class="line">            raise ImportError(&quot;The Chinese tokenizer requires the pyltp library: &quot;</div><div class="line">                              &quot;https://github.com/HIT-SCIR/pyltp&quot;)</div><div class="line">        LTP_DATA_DIR = &apos;D:/path/to/ltp_data&apos; # 这里需要改成哈工大语言模型ltp对应的路径</div><div class="line">        cws_model_path = os.path.join(LTP_DATA_DIR, &apos;cws.model&apos;)  # 分词模型路径，模型名称为`cws.model`</div><div class="line">        segmentor = Segmentor()  # 初始化实例</div><div class="line">        segmentor.load(cws_model_path)  # 加载模型</div><div class="line"></div><div class="line">        words = segmentor.segment(text)  # 分词</div><div class="line">        words = [x for x in words if x]</div><div class="line">        return Doc(self.vocab, words=words, spaces=[False] * len(words))</div><div class="line"></div><div class="line">    # add dummy methods for to_bytes, from_bytes, to_disk and from_disk to</div><div class="line">    # allow serialization (see #1557)</div><div class="line">    def to_bytes(self, **exclude):</div><div class="line">        return b&apos;&apos;</div><div class="line"></div><div class="line">    def from_bytes(self, bytes_data, **exclude):</div><div class="line">        return self</div><div class="line"></div><div class="line">    def to_disk(self, path, **exclude):</div><div class="line">        return None</div><div class="line"></div><div class="line">    def from_disk(self, path, **exclude):</div><div class="line">        return self</div><div class="line"></div><div class="line"></div><div class="line">class ChineseDefaults(Language.Defaults):</div><div class="line">    lex_attr_getters = dict(Language.Defaults.lex_attr_getters)</div><div class="line">    lex_attr_getters[LANG] = lambda text: &apos;zh&apos;</div><div class="line"></div><div class="line">    @classmethod</div><div class="line">    def create_tokenizer(cls, nlp=None):</div><div class="line">        return ChineseTokenizer(cls, nlp)</div><div class="line"></div><div class="line">class Chinese(Language):</div><div class="line">    lang = &apos;zh&apos;</div><div class="line">    Defaults = ChineseDefaults</div><div class="line"></div><div class="line">    def make_doc(self, text):</div><div class="line">        return self.tokenizer(text)</div><div class="line"></div><div class="line">__all__ = [&apos;Chinese&apos;]</div></pre></td></tr></table></figure></p>
+<h2 id="安装pyltp工具"><a href="#安装pyltp工具" class="headerlink" title="安装pyltp工具"></a>安装pyltp工具</h2><p>win + R呼出cmd，输入命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install pyltp</div></pre></td></tr></table></figure></p>
+<h2 id="下载pyltp分词模型"><a href="#下载pyltp分词模型" class="headerlink" title="下载pyltp分词模型"></a>下载pyltp分词模型</h2><p><a href="http://pyltp.readthedocs.io/zh\_CN/latest/api.html#id2" target="_blank" rel="noopener">下载地址</a><br>解压后设置上面代码中LTP_DATA_DIR，指向解压出来的文件夹中的ltp_data目录  </p>
+<h2 id="测试分词器"><a href="#测试分词器" class="headerlink" title="测试分词器"></a>测试分词器</h2><p>spacy采用pytest框架，所有的中文测试都在<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ANACONDA_PATH/Lib/site-packages/spacy/tests/lang/zh</div></pre></td></tr></table></figure></p>
+<h3 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">spacy/tests/confests.py</div></pre></td></tr></table></figure>
+<ul>
+<li><p>添加中文代号’zh’</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">_languages = [&apos;bn&apos;, &apos;da&apos;, &apos;de&apos;, &apos;en&apos;, &apos;es&apos;, &apos;fi&apos;, &apos;fr&apos;, &apos;ga&apos;, &apos;he&apos;, &apos;hu&apos;, &apos;id&apos;,</div><div class="line">              &apos;it&apos;, &apos;nb&apos;, &apos;nl&apos;, &apos;pl&apos;, &apos;pt&apos;, &apos;sv&apos;, &apos;xx&apos;, &apos;zh&apos;] # zh需要自己添加</div></pre></td></tr></table></figure>
+</li>
+<li><p>添加中文分词器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@pytest.fixture</div><div class="line">def zh_tokenizer():</div><div class="line">    return util.get_lang_class(&apos;zh&apos;).Defaults.create_tokenizer()</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="提供测试数据"><a href="#提供测试数据" class="headerlink" title="提供测试数据"></a>提供测试数据</h3><p>spacy/tests/zh(如果没有，则创建)</p>
+<ul>
+<li>添加__init__.py（空文件）</li>
+<li>添加test_tokenizer.py如下</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"># coding: utf8</div><div class="line">from __future__ import unicode_literals</div><div class="line"></div><div class="line">import pytest</div><div class="line"></div><div class="line">TOKENIZER_TESTS = [</div><div class="line">        (&quot;今天天气晴朗。&quot;, [&apos;今天&apos;, &apos;天气&apos;, &apos;晴朗&apos;, &apos;。&apos;]),</div><div class="line">        (&quot;我爱北京天安门。&quot;, [&apos;我&apos;, &apos;爱&apos;, &apos;北京&apos;, &apos;天安门&apos;, &apos;。&apos;])</div><div class="line">]</div><div class="line"></div><div class="line"></div><div class="line">@pytest.mark.parametrize(&apos;text,expected_tokens&apos;, TOKENIZER_TESTS)</div><div class="line">def test_zh_tokenizer(zh_tokenizer, text, expected_tokens):</div><div class="line">    tokens = [token.text for token in zh_tokenizer(text)]</div><div class="line">    assert tokens == expected_tokens</div></pre></td></tr></table></figure>
+<h3 id="运行测试"><a href="#运行测试" class="headerlink" title="运行测试"></a>运行测试</h3><p>在spacy/tests/zh目录下，运行命令提示符，输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">py.test</div></pre></td></tr></table></figure></p>
+<p>pytest会自动运行test_tokenizer.py文件中的test_zh_tokenizer函数，并根据spacy/tests/confest.py中的fixture自动生成zh_tokenizer对象作为参数。  </p>
+<p>如果运行结果类似下图：<br><img src="http://owruh8822.bkt.clouddn.com/spacy_1_tokenizer_test.png" alt="分词器测试"><br>那么恭喜你，分词器添加成功！</p>
+<h1 id="生成spacy中文模型"><a href="#生成spacy中文模型" class="headerlink" title="生成spacy中文模型"></a>生成spacy中文模型</h1><p>spacy官方提供的英语模型包括分词器，词典，命名实体识别模型，句法依赖分析模型，词性标注模型。由于只是简单示例，我们将要生成的中文语言模型只包含分词器和词典。</p>
+<h2 id="为中文模型构建词典"><a href="#为中文模型构建词典" class="headerlink" title="为中文模型构建词典"></a>为中文模型构建词典</h2><h3 id="准备语料库"><a href="#准备语料库" class="headerlink" title="准备语料库"></a>准备语料库</h3><p>sample_corpus.txt，内容如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">你好  </div><div class="line">你好啊  </div><div class="line">你好吗  </div><div class="line">hello  </div><div class="line">hi  </div><div class="line">早上好  </div><div class="line">晚上好  </div><div class="line">嗨  </div><div class="line">是的  </div><div class="line">是  </div><div class="line">对的  </div><div class="line">确实  </div><div class="line">好  </div><div class="line">ok  </div><div class="line">好的  </div><div class="line">好的，谢谢你  </div><div class="line">对的  </div><div class="line">好滴  </div><div class="line">好啊  </div><div class="line">我想找地方吃饭  </div><div class="line">我想吃火锅啊  </div><div class="line">找个吃拉面的店  </div><div class="line">这附近哪里有吃麻辣烫的地方  </div><div class="line">附近有什么好吃的地方吗  </div><div class="line">肚子饿了，推荐一家吃饭的地儿呗  </div><div class="line">带老婆孩子去哪里吃饭比较好  </div><div class="line">想去一家有情调的餐厅  </div><div class="line">bye  </div><div class="line">再见  </div><div class="line">886  </div><div class="line">拜拜  </div><div class="line">下次见  </div><div class="line">感冒了怎么办  </div><div class="line">我便秘了，该吃什么药  </div><div class="line">我胃痛，该吃什么药？  </div><div class="line">一直打喷嚏怎么办  </div><div class="line">父母都有高血压，我会遗传吗  </div><div class="line">我生病了  </div><div class="line">头上烫烫的，感觉发烧了  </div><div class="line">头很疼该怎么办  </div><div class="line">减肥有什么好方法吗  </div><div class="line">怎样良好的生活习惯才能预防生病呢</div></pre></td></tr></table></figure></p>
+<h3 id="构建词典"><a href="#构建词典" class="headerlink" title="构建词典"></a>构建词典</h3><p>复制以下代码，命名为gen_sample_vocab.py<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"># coding: utf8</div><div class="line"></div><div class="line">from spacy.lang.zh import Chinese</div><div class="line">from spacy.vocab import Vocab</div><div class="line">from spacy.vectors import Vectors</div><div class="line">import stringstore_test as st</div><div class="line">import numpy as np</div><div class="line"></div><div class="line"></div><div class="line"># ---------- Global Para ----------</div><div class="line"></div><div class="line"># 创建语言类对象</div><div class="line">nlp = Chinese()</div><div class="line">#  构建分词器</div><div class="line">tokenizer = Chinese().Defaults.create_tokenizer(nlp)</div><div class="line"></div><div class="line"></div><div class="line">def gen_vocab(corpus_path):</div><div class="line">    &quot;&quot;&quot;构建示例vocab&quot;&quot;&quot;</div><div class="line">    # ---------- StringStore ----------</div><div class="line"></div><div class="line">    # 对样本语料切词，获取词列表</div><div class="line">    word_set = set()</div><div class="line">    with open(corpus_path) as file:</div><div class="line">        for line in file.readlines():</div><div class="line">            docs = tokenizer(line)</div><div class="line">            words = [doc.text for doc in docs]</div><div class="line">            word_set.update(words)</div><div class="line">    word_list = [word for word in word_set]  # set =&gt; list</div><div class="line">    </div><div class="line">    # 利用词列表创建StringStore</div><div class="line">    string_store = st.create_stringstore(word_list)</div><div class="line"></div><div class="line">    # ---------- Vector ----------</div><div class="line"></div><div class="line">    # 随机生成词向量，每个词用300维向量表示</div><div class="line">    data = np.random.uniform(-1, 1, (len(word_list), 300))</div><div class="line">    </div><div class="line">    # vocab.vector.keys</div><div class="line">    keys = word_list</div><div class="line">    </div><div class="line">    # 构建vectors</div><div class="line">    vectors = Vectors(data=data, keys=keys)</div><div class="line"></div><div class="line">    # ---------- Vocab ----------</div><div class="line"></div><div class="line">    # 首先用StringStore创建词典，此时vocab.vectors无数据</div><div class="line">    vocab = Vocab(strings=string_store)</div><div class="line">    </div><div class="line">    # 赋值vocab.vectors</div><div class="line">    vocab.vectors = vectors</div><div class="line"></div><div class="line">    return vocab</div></pre></td></tr></table></figure></p>
+<h3 id="利用以下代码创建中文模型，并输出到文件"><a href="#利用以下代码创建中文模型，并输出到文件" class="headerlink" title="利用以下代码创建中文模型，并输出到文件"></a>利用以下代码创建中文模型，并输出到文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"># coding: utf8</div><div class="line"></div><div class="line">from spacy.language import Language</div><div class="line">import gen_sample_vocab as gv</div><div class="line">import os</div><div class="line"></div><div class="line">&quot;&quot;&quot;</div><div class="line">尝试新建中文language model，并输出到文件，供rasa使用。参考：https://spacy.io/api/language#to_disk</div><div class="line">&quot;&quot;&quot;</div><div class="line"></div><div class="line"></div><div class="line"># ------------------------ meta -------------------------------</div><div class="line">&quot;&quot;&quot;语言模型配置字典&quot;&quot;&quot;</div><div class="line"></div><div class="line">meta = &#123;</div><div class="line">  &quot;lang&quot;: &quot;zh&quot;,</div><div class="line">  &quot;pipeline&quot;: [</div><div class="line"></div><div class="line">  ],</div><div class="line">  &quot;name&quot;: &quot;sample&quot;,</div><div class="line">  &quot;license&quot;: &quot;CC BY-SA 3.0&quot;,</div><div class="line">  &quot;author&quot;: &quot;Rongxin Zhu&quot;,</div><div class="line">  &quot;url&quot;: &quot;https://www.zhurongxin.site&quot;,</div><div class="line">  &quot;version&quot;: &quot;0.0.0&quot;,</div><div class="line">  &quot;parent_package&quot;: &quot;spacy&quot;,</div><div class="line">  &quot;vectors&quot;: &#123;</div><div class="line">    &quot;keys&quot;: 90,</div><div class="line">    &quot;width&quot;: 300,</div><div class="line">    &quot;vectors&quot;: 300</div><div class="line">  &#125;,</div><div class="line">  &quot;spacy_version&quot;: &quot;&gt;=2.0.0a18&quot;,</div><div class="line">  &quot;description&quot;: &quot;Chinese sample model for spacy. Tokenizer and vocab only&quot;,</div><div class="line">  &quot;email&quot;: &quot;731935354@qq.com&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"># ------------------------ Vocab -----------------------------</div><div class="line">vocab = gv.gen_vocab(&apos;data/corpus/sample_corpus.txt&apos;)</div><div class="line"></div><div class="line"></div><div class="line"># ------------------------ Language -----------------------------</div><div class="line">&quot;&quot;&quot;语言模型&quot;&quot;&quot;</div><div class="line">nlp = Language(vocab=vocab, meta=meta)</div><div class="line"># 输出语言模型</div><div class="line">nlp.to_disk(path=&apos;data/model/zh&apos;)</div></pre></td></tr></table></figure>
+<p>运行上述代码之后，中文词典和分词器数据会保存在data/model/zh目录下<br><img src="http://owruh8822.bkt.clouddn.com/spacy_1_model_raw_model_data_structure.png" alt="spacy模型结构"></p>
+<ul>
+<li>meta.json: 模型相关信息，包括模型的语言，作者，模型中包含哪些组件等等</li>
+<li>tokenizer: 分词器相关数据</li>
+<li>vocab: 词典相关的数据，结构如下<br><img src="http://owruh8822.bkt.clouddn.com/spacy_1_vocab_structure.png" alt="spacy词典结构"></li>
+</ul>
+<h1 id="安装中文模型，供rasa使用"><a href="#安装中文模型，供rasa使用" class="headerlink" title="安装中文模型，供rasa使用"></a>安装中文模型，供rasa使用</h1><h2 id="将包含语言模型的目录打包为可安装文件"><a href="#将包含语言模型的目录打包为可安装文件" class="headerlink" title="将包含语言模型的目录打包为可安装文件"></a>将包含语言模型的目录打包为可安装文件</h2><p>在data/model目录下，打开cmd，输入命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python -m spacy package zh output</div></pre></td></tr></table></figure>
+<p>该命令会在根据meta.json，在output目录下生成zh_sample-0.0.0<br>如果报错找不到output路径，则需要新建output文件夹。</p>
+<h2 id="安装模型"><a href="#安装模型" class="headerlink" title="安装模型"></a>安装模型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd output/zh_sample-0.0.0</div><div class="line">python setup.py sdist</div><div class="line">pip install dist/zh_sample-0.0.0.tar.gz</div></pre></td></tr></table></figure>
+<h1 id="在rasa中使用中文模型"><a href="#在rasa中使用中文模型" class="headerlink" title="在rasa中使用中文模型"></a>在rasa中使用中文模型</h1><h2 id="修改配置文件-1"><a href="#修改配置文件-1" class="headerlink" title="修改配置文件"></a>修改配置文件</h2><p>在rasa的配置文件中，设置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&quot;language&quot;: &quot;zh&quot;</div><div class="line">&quot;spacy_model_name&quot; : &quot;zh_sample&quot;</div></pre></td></tr></table></figure></p>
+<p>由于我们生成的中文语言模型中不包含命名实体识别模型，因此pipeline中不能使用“ner_spacy”，可以用“ner_crf”代替  </p>
+<p>我的配置文件config_spacy_zh.json如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;name&quot;: &quot;spacy_backend_zh_test&quot;,</div><div class="line">  &quot;pipeline&quot;: &quot;spacy_sklearn&quot;,</div><div class="line">  &quot;language&quot;: &quot;zh&quot;,</div><div class="line">  &quot;path&quot; : &quot;./projects&quot;,</div><div class="line">  &quot;data&quot; : &quot;data/demo-rasa_zh.json&quot;,</div><div class="line">  &quot;spacy_model_name&quot; : &quot;zh_sample&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>spacy_sklearn是rasa预定义的pipeline模板之一，具体为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[&quot;nlp_spacy&quot;, &quot;tokenizer_spacy&quot;, &quot;intent_entity_featurizer_regex&quot;, &quot;intent_featurizer_spacy&quot;, &quot;ner_crf&quot;, &quot;ner_synonyms&quot;,  &quot;intent_classifier_sklearn&quot;]</div></pre></td></tr></table></figure></p>
+<h2 id="运行rasa-nlu"><a href="#运行rasa-nlu" class="headerlink" title="运行rasa_nlu"></a>运行rasa_nlu</h2><p>目录结构<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">learn_rasa</div><div class="line">| -- sample_configs</div><div class="line">     | -- config_spacy.json</div></pre></td></tr></table></figure></p>
+<h3 id="训练rasa模型"><a href="#训练rasa模型" class="headerlink" title="训练rasa模型"></a>训练rasa模型</h3><p>在learn_rasa目录下运行cmd，输入命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python –m rasa_nlu.train –c sample_configs/config_spacy_zh.json</div></pre></td></tr></table></figure></p>
+<p>基于示例训练数据训练rasa各个组件<br>示例数据目录在config_spacy_zh.json中配置，具体为data/demo-rasa_zh.json，形如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;rasa_nlu_data&quot;: &#123;</div><div class="line">    &quot;common_examples&quot;: [</div><div class="line">      &#123;</div><div class="line">        &quot;text&quot;: &quot;你好&quot;,</div><div class="line">        &quot;intent&quot;: &quot;greet&quot;,</div><div class="line">        &quot;entities&quot;: []</div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        &quot;text&quot;: &quot;你好啊&quot;,</div><div class="line">        &quot;intent&quot;: &quot;greet&quot;,</div><div class="line">        &quot;entities&quot;: []</div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>训练好的模型保存路径对应config_spacy_zh.json中的path字段。模型结构如下<br><img src="http://owruh8822.bkt.clouddn.com/spacy_1_rasa_nlu_model.png" alt="rasa模型结构">  </p>
+<ul>
+<li>crf_model.pkl: ner_crf模型</li>
+<li>entity_synonyms.json: 同义词实体对照表</li>
+<li>intent_classifier.pkl: 意图分类模型</li>
+<li>metadata.json: 整体模型信息</li>
+<li>training_data.json: 训练数据，与data/demo-rasa_zh.json相同</li>
+</ul>
+<h3 id="开启rasa后台"><a href="#开启rasa后台" class="headerlink" title="开启rasa后台"></a>开启rasa后台</h3><p>在learn_rasa目录运行cmd，输入命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python –m rasa_nlu.server –c sample_configs/config_spacy_zh.json</div></pre></td></tr></table></figure></p>
+<h3 id="利用浏览器测试"><a href="#利用浏览器测试" class="headerlink" title="利用浏览器测试"></a>利用浏览器测试</h3><p>在浏览器中输入网址<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://localhost:5000/parse?q=胃痛怎么办</div></pre></td></tr></table></figure></p>
+<p>将返回如下结果</p>
+<p><img src="http://owruh8822.bkt.clouddn.com/spacy_1_result.png" alt="示例结果"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spacy/" rel="tag"># spacy</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/06/mit_7_order_statistics_and_median/" rel="next" title="MIT算法导论笔记(7):顺序统计、中值">
+                <i class="fa fa-chevron-left"></i> MIT算法导论笔记(7):顺序统计、中值
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">朱荣鑫</p>
+              <p class="site-description motion-element" itemprop="description">做更好的自己</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#为spacy添加中文分词器-基于哈工大ltp工具包"><span class="nav-number">1.</span> <span class="nav-text">为spacy添加中文分词器(基于哈工大ltp工具包)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#修改spacy源码"><span class="nav-number">1.1.</span> <span class="nav-text">修改spacy源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装pyltp工具"><span class="nav-number">1.2.</span> <span class="nav-text">安装pyltp工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载pyltp分词模型"><span class="nav-number">1.3.</span> <span class="nav-text">下载pyltp分词模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试分词器"><span class="nav-number">1.4.</span> <span class="nav-text">测试分词器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改配置文件"><span class="nav-number">1.4.1.</span> <span class="nav-text">修改配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提供测试数据"><span class="nav-number">1.4.2.</span> <span class="nav-text">提供测试数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行测试"><span class="nav-number">1.4.3.</span> <span class="nav-text">运行测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成spacy中文模型"><span class="nav-number">2.</span> <span class="nav-text">生成spacy中文模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为中文模型构建词典"><span class="nav-number">2.1.</span> <span class="nav-text">为中文模型构建词典</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备语料库"><span class="nav-number">2.1.1.</span> <span class="nav-text">准备语料库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建词典"><span class="nav-number">2.1.2.</span> <span class="nav-text">构建词典</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用以下代码创建中文模型，并输出到文件"><span class="nav-number">2.1.3.</span> <span class="nav-text">利用以下代码创建中文模型，并输出到文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装中文模型，供rasa使用"><span class="nav-number">3.</span> <span class="nav-text">安装中文模型，供rasa使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#将包含语言模型的目录打包为可安装文件"><span class="nav-number">3.1.</span> <span class="nav-text">将包含语言模型的目录打包为可安装文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装模型"><span class="nav-number">3.2.</span> <span class="nav-text">安装模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在rasa中使用中文模型"><span class="nav-number">4.</span> <span class="nav-text">在rasa中使用中文模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#修改配置文件-1"><span class="nav-number">4.1.</span> <span class="nav-text">修改配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行rasa-nlu"><span class="nav-number">4.2.</span> <span class="nav-text">运行rasa_nlu</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#训练rasa模型"><span class="nav-number">4.2.1.</span> <span class="nav-text">训练rasa模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启rasa后台"><span class="nav-number">4.2.2.</span> <span class="nav-text">开启rasa后台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用浏览器测试"><span class="nav-number">4.2.3.</span> <span class="nav-text">利用浏览器测试</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">朱荣鑫</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

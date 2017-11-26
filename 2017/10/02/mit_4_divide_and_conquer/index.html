@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="分治法," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="分治法是计算机科学中很重要的算法，其核心思想是将一个复杂的问题分解成若干个子问题，对子问题逐个击破，最后将结果合并。主要步骤:   分：把一个问题的特殊实例划分成若干子问题（子问题规模应比原问题更小）。 治：递归地解决每一个子问题。 合：将子问题的解合并。">
+<meta name="keywords" content="分治法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MIT算法导论笔记(4):分治法">
+<meta property="og:url" content="http://yoursite.com/2017/10/02/mit_4_divide_and_conquer/index.html">
+<meta property="og:site_name" content="LifeStory">
+<meta property="og:description" content="分治法是计算机科学中很重要的算法，其核心思想是将一个复杂的问题分解成若干个子问题，对子问题逐个击破，最后将结果合并。主要步骤:   分：把一个问题的特殊实例划分成若干子问题（子问题规模应比原问题更小）。 治：递归地解决每一个子问题。 合：将子问题的解合并。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://owruh8822.bkt.clouddn.com/mit_4_embed_complete_binary_tree.png">
+<meta property="og:image" content="http://owruh8822.bkt.clouddn.com/mit_4_H_layout.png">
+<meta property="og:updated_time" content="2017-11-26T03:08:04.643Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MIT算法导论笔记(4):分治法">
+<meta name="twitter:description" content="分治法是计算机科学中很重要的算法，其核心思想是将一个复杂的问题分解成若干个子问题，对子问题逐个击破，最后将结果合并。主要步骤:   分：把一个问题的特殊实例划分成若干子问题（子问题规模应比原问题更小）。 治：递归地解决每一个子问题。 合：将子问题的解合并。">
+<meta name="twitter:image" content="http://owruh8822.bkt.clouddn.com/mit_4_embed_complete_binary_tree.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/02/mit_4_divide_and_conquer/"/>
+
+
+
+
+
+  <title>MIT算法导论笔记(4):分治法 | LifeStory</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LifeStory</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/02/mit_4_divide_and_conquer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朱荣鑫">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LifeStory">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MIT算法导论笔记(4):分治法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-02T15:00:00+08:00">
+                2017-10-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>分治法是计算机科学中很重要的算法，其核心思想是将一个复杂的问题分解成若干个子问题，对子问题逐个击破，最后将结果合并。<br>主要步骤: </p>
+<ol>
+<li><strong>分</strong>：把一个问题的特殊实例划分成若干子问题（子问题规模应比原问题更小）。</li>
+<li><strong>治</strong>：递归地解决每一个子问题。</li>
+<li><strong>合</strong>：将子问题的解合并。</li>
+</ol>
+<a id="more"></a>
+<p>以下为应用分治法的几个经典案例</p>
+<h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>将待排序数组一分为二。</li>
+<li>递归地对每一个子数组进行排序。</li>
+<li>合并两个有序数组。</li>
+</ol>
+<h2 id="运行时间分析"><a href="#运行时间分析" class="headerlink" title="运行时间分析"></a>运行时间分析</h2><p>$T(n)=2T(\frac{n}{2})+\Theta(n)$</p>
+<ul>
+<li>$2T(\frac{n}{2})$实际上应该是$T(\frac{n}{2})$的<strong>上界</strong>与<strong>下界</strong>相加，但此处可以将上界与下界省掉（具体将在下节介绍）</li>
+<li>2为子问题的数量</li>
+<li>$\Theta(n)$为附加的计算量，即不包含递归的部分，此例为合并数组的计算量。</li>
+</ul>
+<p>根据主定理，属于情况2，$T(n)=\Theta(n^{\log_ba}{\lg}^{k+1}n)$，其中a=2，b=2，k=0。<br>$\Rightarrow T(n)=\Theta(n\lg n)$</p>
+<h1 id="二分查找"><a href="#二分查找" class="headerlink" title="二分查找"></a>二分查找</h1><h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>在一个有序数组中寻找元素x。</p>
+<h2 id="步骤-1"><a href="#步骤-1" class="headerlink" title="步骤"></a>步骤</h2><ul>
+<li>分：将x与数组中央元素比较</li>
+<li>治：在其中一个子数组中递归查找</li>
+<li>合：无</li>
+</ul>
+<h2 id="运行时间分析-1"><a href="#运行时间分析-1" class="headerlink" title="运行时间分析"></a>运行时间分析</h2><p>$T(n)=T(\frac{n}{2})+\Theta(1)=\Theta(\lg{n})$</p>
+<h1 id="乘方问题"><a href="#乘方问题" class="headerlink" title="乘方问题"></a>乘方问题</h1><h2 id="问题描述-1"><a href="#问题描述-1" class="headerlink" title="问题描述"></a>问题描述</h2><p>给定一个实数x和一个正整数n，计算$x^n$。</p>
+<h2 id="朴素算法"><a href="#朴素算法" class="headerlink" title="朴素算法"></a>朴素算法</h2><p>将x连乘n次，时间复杂度$\Theta(n)$。</p>
+<h2 id="分治法"><a href="#分治法" class="headerlink" title="分治法"></a>分治法</h2><script type="math/tex; mode=display">x^n=
+\begin{cases}
+x^{\frac{n}{2}} \cdot x^{\frac{n}{2}} \quad \text{(n为偶数)} \\
+x^{\frac{n-1}{2}} \cdot x^{\frac{n-1}{2}} \cdot x \quad \text{(n为奇数)}
+\end{cases}</script><h3 id="运行时间分析-2"><a href="#运行时间分析-2" class="headerlink" title="运行时间分析"></a>运行时间分析</h3><p>$T(n)=T(\frac{n}{2})+\Theta(1)=\Theta(\lg{n})$</p>
+<h1 id="裴波那契数"><a href="#裴波那契数" class="headerlink" title="裴波那契数"></a>裴波那契数</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><script type="math/tex; mode=display">F(n)=
+\begin{cases}
+0 & n=0 \\
+1 & n=1 \\
+F(n-1)+F(n-2) & n \geqslant 2 \\
+\end{cases}</script><h2 id="递归算法"><a href="#递归算法" class="headerlink" title="递归算法"></a>递归算法</h2><p>$T(n)=\Omega({\phi}^n)$，$\phi=\frac{1+\sqrt{5}}{2}$（黄金比例数），即<strong>指数级</strong>运行时间。</p>
+<h2 id="自下而上算法"><a href="#自下而上算法" class="headerlink" title="自下而上算法"></a>自下而上算法</h2><p>如果把递归算法按递归树的形式展开，会发现其中有很多重复的子树，这是递归算法运行时间长的主要原因。因此，如果依次计算$F(0),F(1),F(2) \dots$，就可以把运行时间降低为线性复杂度。<br>$T(n)=\Theta(n)$</p>
+<h2 id="朴素平方递归"><a href="#朴素平方递归" class="headerlink" title="朴素平方递归"></a>朴素平方递归</h2><p>$F(n)=round({\phi}^n/\sqrt{5})$，round表示取最接近的整数</p>
+<h3 id="理论复杂度"><a href="#理论复杂度" class="headerlink" title="理论复杂度"></a>理论复杂度</h3><ul>
+<li>求${\phi}^n$：$\Theta(\lg{n})$</li>
+<li>除以$\sqrt{5}$：$\Theta(1)$</li>
+<li>取最接近的整数：$\Theta(1)$</li>
+</ul>
+<h3 id="理论复杂度实际不可行的原因"><a href="#理论复杂度实际不可行的原因" class="headerlink" title="理论复杂度实际不可行的原因"></a>理论复杂度实际不可行的原因</h3><ul>
+<li>$\phi$和$\sqrt{5}$需要用浮点数来表示，浮点数的精确位数是有限的，因此可能会得到错误的答案。</li>
+<li>$\phi \cdot \phi$运算无法在常数时间内完成。</li>
+</ul>
+<h2 id="平方递归"><a href="#平方递归" class="headerlink" title="平方递归"></a>平方递归</h2><h3 id="定理"><a href="#定理" class="headerlink" title="定理"></a>定理</h3><script type="math/tex; mode=display">
+ {\begin{matrix}
+\begin{pmatrix} F(n+1) & F(n) \\ F(n) & F(n-1) \end{pmatrix} 
+= 
+{\begin{pmatrix} 1 & 1 \\  1 & 0 \end{pmatrix}}^n
+\end{matrix}}</script><h3 id="运行时间"><a href="#运行时间" class="headerlink" title="运行时间"></a>运行时间</h3><p>$T(n)=\Theta(\lg{n})$</p>
+<h3 id="利用数学归纳法证明定理"><a href="#利用数学归纳法证明定理" class="headerlink" title="利用数学归纳法证明定理"></a>利用数学归纳法证明定理</h3><ul>
+<li>基本情况 <script type="math/tex; mode=display">
+{\begin{matrix}
+{\begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}}^1 
+= 
+\begin{pmatrix} F(2) & F(1) \\  F(1) & F(0) \end{pmatrix}
+\end{matrix}}</script></li>
+<li>假设<script type="math/tex; mode=display">
+{\begin{matrix}
+\begin{pmatrix} F(k+1) & F(k) \\ F(k) & F(k-1) \end{pmatrix} 
+= 
+{\begin{pmatrix} 1 & 1 \\  1 & 0 \end{pmatrix}}^k
+\end{matrix}}</script></li>
+<li>推导<script type="math/tex; mode=display">
+{\begin{matrix}
+\begin{pmatrix} F(n+1) & F(n) \\ F(n) & F(n-1) \end{pmatrix} 
+= 
+\begin{pmatrix} F(n) & F(n-1) \\  F(n-1) & F(n-2) \end{pmatrix}
+\end{matrix}} \cdot X</script>根据假设和裴波那契数的定义，可以求出<script type="math/tex; mode=display">
+X=\begin{pmatrix} 1 & 1 \\  1 & 0 \end{pmatrix}</script>即<script type="math/tex; mode=display">
+\begin{matrix}
+\begin{pmatrix} F(n+1) & F(n) \\ F(n) & F(n-1) \end{pmatrix} 
+= 
+{\begin{pmatrix} 1 & 1 \\  1 & 0 \end{pmatrix}}^{n-1} \cdot \begin{pmatrix} 1 & 1 \\  1 & 0 \end{pmatrix}
+=
+{\begin{pmatrix} 1 & 1 \\  1 & 0 \end{pmatrix}}^n
+\end{matrix}</script>得证。</li>
+</ul>
+<h1 id="矩阵乘法"><a href="#矩阵乘法" class="headerlink" title="矩阵乘法"></a>矩阵乘法</h1><h2 id="问题描述-2"><a href="#问题描述-2" class="headerlink" title="问题描述"></a>问题描述</h2><p>给定方阵$A=[a<em>{ij}]$和$B=[b</em>{ij}]$，$(i,j = 1,2,\dots, n)$，求矩阵$C$，$C=A \cdot B$<br>$c<em>{ij}=\sum</em>{k=1}^{n} a<em>{ik} \cdot b</em>{kj}$</p>
+<h2 id="标准解法-Theta-n-3"><a href="#标准解法-Theta-n-3" class="headerlink" title="标准解法$\Theta(n^3)$"></a>标准解法$\Theta(n^3)$</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">for i ← 1 to n</div><div class="line">	for j ← 1 to n</div><div class="line">		c[i][j] ← 0</div><div class="line">		for k ← 1 to n</div><div class="line">			c[i][j] ← c[i][j] + a[i][k] + b[k][j]</div></pre></td></tr></table></figure>
+<h2 id="分治法-1"><a href="#分治法-1" class="headerlink" title="分治法"></a>分治法</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>将原矩阵视为$2 \times 2$的分块矩阵，其中每一块都是$\frac{n}{2} \times \frac{n}{2}$子矩阵。<br>$C=A \times B$改写成</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+\begin{bmatrix} r & s \\  t & u \end{bmatrix}
+=
+\begin{bmatrix} a & b \\  c & d \end{bmatrix}
+\times
+\begin{bmatrix} e & f \\  g & h \end{bmatrix}
+\end{matrix}</script><p>其中<br>$r=ae+bg$<br>$s=af+bh$<br>$t=ce+dg$<br>$u=cf+dh$  </p>
+<h3 id="运行时间分析-3"><a href="#运行时间分析-3" class="headerlink" title="运行时间分析"></a>运行时间分析</h3><p>8次规模为$\frac{n}{2} \times \frac{n}{2}$的子矩阵的递归乘法：递归<br>4次矩阵加法：$\Theta(n^2)$<br>$T(n)=8T(n/2)+\Theta(n^2)$<br>由主定理<br>$n^{\log_ba} = n^{\log_28} = n^3$<br>$n^2$多项式的小于$n^3$，属于情况1<br>$T(n)=\Theta(n^{\log_ba})=\Theta(n^3)$<br>运行时间相比标准解法并没有提高</p>
+<h2 id="斯特拉森算法"><a href="#斯特拉森算法" class="headerlink" title="斯特拉森算法"></a>斯特拉森算法</h2><h3 id="改进思路"><a href="#改进思路" class="headerlink" title="改进思路"></a>改进思路</h3><p>由上面的运行时间分析可知，矩阵乘法的代价明显高于矩阵加法的代价，因此要想办法减少矩阵乘法的次数，即使矩阵加法次数变多也无所谓。<br>尝试将上面的8次矩阵乘法降低到7次。  </p>
+<h3 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h3><p>$P_1=a \cdot (f-h)$<br>$P_2=(a+b) \cdot h$<br>$P_3=(c+d) \cdot e$<br>$P_4=d \cdot (g-e)$<br>$P_5=(a+d) \cdot (e+h)$<br>$P_6=(b-d) \cdot (g+h)$<br>$P_7=(a-c) \cdot (e+f)$<br>$r=P_5+P_4-P2+P6$<br>$s=P_1+P_2$<br>$t=P_3+P_4$<br>$u=P_5+P_1-P_3-P_7$</p>
+<ol>
+<li>分解$A$和$B$，计算所有的项【$(a+b)$,$(c+d)$等】——$\Theta(n^2)$</li>
+<li>递归计算所有的$P_i$，即$P_1，P_2，\dots P_7$</li>
+<li>计算r，s，t，u——$\Theta(n^2)$</li>
+</ol>
+<h3 id="运行时间分析-4"><a href="#运行时间分析-4" class="headerlink" title="运行时间分析"></a>运行时间分析</h3><p>$T(n)=7T(\frac{n}{2})+\Theta(n^2)$<br>根据主定理，$n^{\log_ba}=n^{\log_27}$多项式的大于$n^2$，属于情况1<br>$\Rightarrow T(n)=\Theta(n^{\lg{7}})=O(n^{2.81})$<br>目前最好的算法运行时间为$O(n^{2.376})$ </p>
+<h1 id="超大规模集成电路布局"><a href="#超大规模集成电路布局" class="headerlink" title="超大规模集成电路布局"></a>超大规模集成电路布局</h1><h2 id="问题描述-3"><a href="#问题描述-3" class="headerlink" title="问题描述"></a>问题描述</h2><p>将一个有n个叶子的完全二叉树嵌入到网格中，使得占用的面积最小。<br><strong>完全二叉树</strong>：每一层节点数都为2的幂。<br><strong>叶子</strong>：树的最底层的节点。<br><strong>嵌入网格</strong>：二叉树的节点要放在网格的顶点上，连接两点的边不可交叉。</p>
+<h2 id="朴素算法-1"><a href="#朴素算法-1" class="headerlink" title="朴素算法"></a>朴素算法</h2><p><img src="http://owruh8822.bkt.clouddn.com/mit_4_embed_complete_binary_tree.png" alt="这里写图片描述"><br>$H(n)=H(\frac{n}{2})+\Theta(1)=\Theta(\lg{n})$<br>$W(n)=2W(\frac{n}{2})+O(1)=\Theta(n)$<br>面积=$\Theta(n\lg{n})$</p>
+<h2 id="将-Theta-n-lg-n-改进为-Theta-n"><a href="#将-Theta-n-lg-n-改进为-Theta-n" class="headerlink" title="将$\Theta(n\lg{n})$改进为$\Theta(n)$"></a>将$\Theta(n\lg{n})$改进为$\Theta(n)$</h2><p>目标</p>
+<ul>
+<li>$H(n)=\Theta(\sqrt{n})$</li>
+<li>$W(n)=\Theta(\sqrt{n})$</li>
+</ul>
+<p>$\Rightarrow 面积=\Theta(n)$</p>
+<p>思路：根据主定理逆推，$T(n)=aT(\frac{n}{b})+f(n)$，当$n^{\log_ba}=n^{\frac{1}{2}}$且$f(n)$多项式地小于$\sqrt{n}$时，$T(n)=\Theta(\sqrt{n})$。<br>尝试构建递归式：$T(n)=2T(\frac{n}{4})+\Theta(n^{\frac{1}{2}-\epsilon})$</p>
+<p><img src="http://owruh8822.bkt.clouddn.com/mit_4_H_layout.png" alt="这里写图片描述"></p>
+<p>$L(n)=2L(\frac{n}{4})+\Theta(1)=\Theta(\sqrt{n})$</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/分治法/" rel="tag"># 分治法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/24/mit_3_solve_recursive/" rel="next" title="MIT算法导论笔记(3):求解递归式">
+                <i class="fa fa-chevron-left"></i> MIT算法导论笔记(3):求解递归式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/19/mit_5_quick_sort/" rel="prev" title="MIT算法导论笔记(5):快速排序">
+                MIT算法导论笔记(5):快速排序 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">朱荣鑫</p>
+              <p class="site-description motion-element" itemprop="description">做更好的自己</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#归并排序"><span class="nav-number">1.</span> <span class="nav-text">归并排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#步骤"><span class="nav-number">1.1.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行时间分析"><span class="nav-number">1.2.</span> <span class="nav-text">运行时间分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二分查找"><span class="nav-number">2.</span> <span class="nav-text">二分查找</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述"><span class="nav-number">2.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#步骤-1"><span class="nav-number">2.2.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行时间分析-1"><span class="nav-number">2.3.</span> <span class="nav-text">运行时间分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#乘方问题"><span class="nav-number">3.</span> <span class="nav-text">乘方问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述-1"><span class="nav-number">3.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#朴素算法"><span class="nav-number">3.2.</span> <span class="nav-text">朴素算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分治法"><span class="nav-number">3.3.</span> <span class="nav-text">分治法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#运行时间分析-2"><span class="nav-number">3.3.1.</span> <span class="nav-text">运行时间分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#裴波那契数"><span class="nav-number">4.</span> <span class="nav-text">裴波那契数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">4.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#递归算法"><span class="nav-number">4.2.</span> <span class="nav-text">递归算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自下而上算法"><span class="nav-number">4.3.</span> <span class="nav-text">自下而上算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#朴素平方递归"><span class="nav-number">4.4.</span> <span class="nav-text">朴素平方递归</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#理论复杂度"><span class="nav-number">4.4.1.</span> <span class="nav-text">理论复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理论复杂度实际不可行的原因"><span class="nav-number">4.4.2.</span> <span class="nav-text">理论复杂度实际不可行的原因</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平方递归"><span class="nav-number">4.5.</span> <span class="nav-text">平方递归</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定理"><span class="nav-number">4.5.1.</span> <span class="nav-text">定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行时间"><span class="nav-number">4.5.2.</span> <span class="nav-text">运行时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用数学归纳法证明定理"><span class="nav-number">4.5.3.</span> <span class="nav-text">利用数学归纳法证明定理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#矩阵乘法"><span class="nav-number">5.</span> <span class="nav-text">矩阵乘法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述-2"><span class="nav-number">5.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标准解法-Theta-n-3"><span class="nav-number">5.2.</span> <span class="nav-text">标准解法$\Theta(n^3)$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分治法-1"><span class="nav-number">5.3.</span> <span class="nav-text">分治法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#思路"><span class="nav-number">5.3.1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行时间分析-3"><span class="nav-number">5.3.2.</span> <span class="nav-text">运行时间分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#斯特拉森算法"><span class="nav-number">5.4.</span> <span class="nav-text">斯特拉森算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#改进思路"><span class="nav-number">5.4.1.</span> <span class="nav-text">改进思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法描述"><span class="nav-number">5.4.2.</span> <span class="nav-text">算法描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行时间分析-4"><span class="nav-number">5.4.3.</span> <span class="nav-text">运行时间分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#超大规模集成电路布局"><span class="nav-number">6.</span> <span class="nav-text">超大规模集成电路布局</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述-3"><span class="nav-number">6.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#朴素算法-1"><span class="nav-number">6.2.</span> <span class="nav-text">朴素算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将-Theta-n-lg-n-改进为-Theta-n"><span class="nav-number">6.3.</span> <span class="nav-text">将$\Theta(n\lg{n})$改进为$\Theta(n)$</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">朱荣鑫</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
